@@ -18,7 +18,7 @@ const LocalStrategy = require("passport-local");
 // Setup options for JWT strategy
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromHeader("authorization"),
-  secretOrKey: config.secret || "DAnAkNmnk2jHONa4wVK0ss", // for decoding JWT
+  secretOrKey: config.secret || "gdghdfhghfhdfhfhfhf", // for decoding JWT
 };
 
 // Create JWT strategy (authenticate user with JWT)
