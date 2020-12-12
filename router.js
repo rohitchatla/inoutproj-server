@@ -37,8 +37,7 @@ module.exports = function (app) {
   app.put("/api/password", requireAuth, Profile.resetPassword);
 
   /*Services */
-  app.get("/api/services", Services.fetchServices);
-
+  app.get("/api/getservices", Services.fetchServices);
 
   /*
   Work Routes

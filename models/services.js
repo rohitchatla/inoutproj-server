@@ -7,10 +7,9 @@ const serviceSchema = new Schema({
   name: { type: String },
   description: { type: String },
   approxCost: { type: Number },
-  type: [{type: Object}],
-  isSkilled: {type: Boolean, default: false},
+  type: [{ type: Object }],
+  isSkilled: { type: Boolean, default: false },
 });
-
 
 // Create the model class
 const ModelClass = mongoose.model("service", serviceSchema);

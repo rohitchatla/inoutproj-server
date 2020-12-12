@@ -7,15 +7,11 @@ const Services = require("../models/services");
  * @param res
  * @param next
  */
-exports.fetchServices = function (req, res, next) {
-    
-    const services = Services.find();
+exports.fetchServices = async function (req, res, next) {
+  const services = await Services.find({});
 
-    if(!services) res.send({error:"No services available"});
+  if (!services) res.send({ error: "No services available" });
 
-    res.send(services);
+  res.send(services);
+  console.log("ssssss");
 };
-
-
-
-
