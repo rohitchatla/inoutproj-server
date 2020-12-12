@@ -1,6 +1,7 @@
 const Authentication = require("./controllers/authentication");
 const Profile = require("./controllers/userinfo");
-
+const Work = require("./controllers/work");
+const Services = require("./controllers/services");
 // service
 const passport = require("passport");
 const passportService = require("./services/passport");
@@ -34,6 +35,16 @@ module.exports = function (app) {
   app.put("/api/profile", requireAuth, Profile.updateProfile);
 
   app.put("/api/password", requireAuth, Profile.resetPassword);
+
+  /*Services */
+  app.get("/api/services", Services.fetchServices);
+
+
+  /*
+  Work Routes
+  */
+  app.post("/api/work", requireAuth, Work.postWork);
+  app.get("/api/work", requireAuth, Work.fetchWorks);
 };
 
 // CRUD:
