@@ -129,3 +129,30 @@ exports.resetPassword = function (req, res, next) {
     });
   });
 };
+
+exports.updateAgent = function (req, res, next) {
+  console.log(req.body);
+  const {
+    uid,
+    phno,
+    sex,
+    description,
+    address,
+    occupation,
+    birthday,
+    skills,
+  } = req.body;
+  User.findById(uid).then((user) => {
+    user.phone = phno;
+    user.sex = sex;
+    user.description = description;
+    user.occupation = occupation;
+    user.address = address;
+    user.birthday = birthday;
+    user.isAgent = true;
+    user.skills = skills;
+    user.save().then((u) => {
+      res.send(u);
+    });
+  });
+};

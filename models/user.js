@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt-nodejs");
 
 // Define our model
 const userSchema = new Schema({
-
   //userDetails
   email: { type: String, unique: true, lowercase: true },
   password: String,
@@ -18,9 +17,11 @@ const userSchema = new Schema({
   description: { type: String, default: "" },
 
   //agentDetails
-  isAgent: {type: Boolean, default : false},
-  skill: {type: String, default:''},
-  aadharid: {type: String, default: ''},
+  isAgent: { type: Boolean, default: false },
+  skills: { type: String, default: "" },
+  aadharid: { type: String, default: "" },
+  isWorking: { type: Boolean, default: false },
+  currentWorking: { type: mongoose.Schema.Types.ObjectId, ref: "work" },
 });
 
 // On Save Hook, encrypt the password

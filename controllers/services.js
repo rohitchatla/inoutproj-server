@@ -13,5 +13,4 @@ exports.fetchServices = async function (req, res, next) {
   if (!services) res.send({ error: "No services available" });
 
   res.send(services);
-  console.log("ssssss");
 };
