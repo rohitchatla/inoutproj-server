@@ -7,6 +7,7 @@ const Workschema = require("./models/work");
 const Authentication = require("./controllers/authentication");
 const Profile = require("./controllers/userinfo");
 const Work = require("./controllers/work");
+const Payment = require("./controllers/payment");
 const Services = require("./controllers/services");
 // service
 const passport = require("passport");
@@ -73,6 +74,8 @@ module.exports = function (app) {
   app.post("/api/work/status/custrejected", Work.custrejected);
   app.post("/api/work/status/workdone", Work.workdone);
 
+  app.post("/api/payment/", Payment.payment);
+
   app.post("/api/work", uploadFile.single("file"), (req, res, next) => {
     const { uid, name, description, cost, serviceId } = req.body; //files
     let status = [];
@@ -98,6 +101,7 @@ module.exports = function (app) {
       photo: req.file.filename,
       status: status,
       workstatus: workstatus,
+      completedtransaction: [],
     }).then((work) => {
       res.send(work);
     });

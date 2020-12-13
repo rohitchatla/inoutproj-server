@@ -29,6 +29,12 @@ const workSchema = new Schema({
   status: [statusSchema],
   isWork: { type: Boolean, default: false },
   workstatus: [workStatusSchema],
+  completedtransaction: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "transactions",
+    },
+  ],
 });
 
 // Create the model class

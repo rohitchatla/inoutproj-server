@@ -2,6 +2,29 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt-nodejs");
 
+const SavedCard = new Schema({
+  stripe_customer_id: {
+    type: String,
+    required: [true, "stripe_customer_id is required"],
+  },
+  card_brand: {
+    type: String,
+    required: [true, "card_brand is required"],
+  },
+  last_four_digit: {
+    type: String,
+    required: [true, "last_four_digit is required"],
+  },
+  exp_month: {
+    type: String,
+    required: [true, "exp_month is required"],
+  },
+  exp_year: {
+    type: String,
+    required: [true, "exp_year is required"],
+  },
+});
+
 // Define our model
 const userSchema = new Schema({
   //userDetails
@@ -22,6 +45,7 @@ const userSchema = new Schema({
   aadharid: { type: String, default: "" },
   isWorking: { type: Boolean, default: false },
   currentWorking: { type: mongoose.Schema.Types.ObjectId, ref: "work" },
+  savedCards: [SavedCard],
 });
 
 // On Save Hook, encrypt the password
