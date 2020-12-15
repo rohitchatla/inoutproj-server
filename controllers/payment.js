@@ -5,22 +5,15 @@ require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 const { v4: uuidv4 } = require("uuid");
 
-// Router.post("/trans", async (req, res, next) => {
-//   const { email } = req.body;
-//   let cid;
-//   try {
-//     userSchema
-//       .findOne({ email: email })
-//       .then(async (response) => {
-//         cid = response._id;
-//         const fetchtrans = await TransactionDoc.find({ userId: cid });
-//         res.send(fetchtrans);
-//       })
-//       .catch(next);
-//   } catch (err) {
-//     res.json({ message: err });
-//   }
-// });
+exports.trans = async function (req, res, next) {
+  try {
+    const { id } = req.params;
+    const fetchtrans = await TransactionDoc.find({ userId: id });
+    res.send(fetchtrans);
+  } catch (err) {
+    res.json({ message: err });
+  }
+};
 
 exports.payment = async function (req, res, next) {
   console.log("started");

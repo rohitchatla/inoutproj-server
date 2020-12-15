@@ -17,8 +17,16 @@ const LocalStrategy = require("passport-local");
 
 // Setup options for JWT strategy
 const jwtOptions = {
+  //jwtFromRequest: ExtractJwt.fromHeader("authorization"),
+  /*
+     * Deprecated: fromAuthHeader() - see update above
+    jwtFromRequest: ExtractJwt.fromAuthHeader(),
+  */
+  /*Update: This answer used ExtractJwt.fromAuthHeader, which is now deprecated. It has been updated to use ExtractJwt.fromAuthHeaderWithScheme('jwt') */
+  //jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
+  //jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
   jwtFromRequest: ExtractJwt.fromHeader("authorization"),
-  secretOrKey: config.secret || "gdghdfhghfhdfhfhfhf", // for decoding JWT
+  secretOrKey: config.secret || "Gsenfksdjldsmdhmkdfkdsmfkmsdknfsdk", // for decoding JWT
 };
 
 // Create JWT strategy (authenticate user with JWT)
@@ -53,10 +61,15 @@ const localLogin = new LocalStrategy(
     // Verify this email and password
     // Call done with the user if it is the correct email and password
     // Otherwise, call done with false
+
+    //console.log(email, password);
+
     User.findOne({ email: email }, function (err, user) {
       if (err) {
         return done(err);
       }
+
+      //console.log(user.password);
 
       if (!user) {
         return done(null, false, { message: "Incorrect username." }); // that last argument is the info argument to the authenticate callback
@@ -67,7 +80,7 @@ const localLogin = new LocalStrategy(
         if (err) {
           return done(err);
         }
-
+        //console.log(isMatch);
         if (!isMatch) {
           return done(null, false, { message: "Incorrect password." }); // that last argument is the info argument to the authenticate callback
         }

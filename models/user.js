@@ -53,7 +53,7 @@ userSchema.pre("save", function (next) {
   // before saving the model, run this funtion
 
   const user = this; // get access to the user model
-  console.log(user);
+  //console.log(user);
   bcrypt.genSalt(10, function (err, salt) {
     // generate a salt, then run callback
 
@@ -81,10 +81,14 @@ userSchema.methods.comparePassword = function (candidatePassword, callback) {
   // used in LocalStrategy
 
   // candidatePassword will be encrypted internally in this function
+  // console.log(candidatePassword);
+  // console.log(this.password);
+
   bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
     if (err) {
       return callback(err);
     }
+    //console.log(isMatch);
     callback(null, isMatch);
   });
 };

@@ -1,0 +1,29 @@
+/**  Sockets routines **/
+
+//UPDATE: this is seems to be deprecated
+//let io = require('socket.io').listen(app.listen(9009));
+//New Syntax:
+// const io = require('socket.io')(app.listen(9009));
+
+// app.all('/', function (request, response, next) {
+//     response.header("Access-Control-Allow-Origin", "*");
+//     response.header("Access-Control-Allow-Headers", "X-Requested-With");
+//     next();
+// });
+
+//var server = app.listen(5000);
+// var io = require("socket.io")(server, {
+//   origins: ["http://localhost:5000"],
+
+//   // optional, useful for custom headers
+//   handlePreflightRequest: (req, res) => {
+//     res.writeHead(200, {
+//       "Access-Control-Allow-Origin": "http://localhost:5000",
+//       "Access-Control-Allow-Methods": "GET,POST",
+//       "Access-Control-Allow-Headers": "my-custom-header",
+//       "Access-Control-Allow-Credentials": true,
+//     });
+//     res.end();
+//   },
+// }); //.listen
+//io.set("origins", "*:*");

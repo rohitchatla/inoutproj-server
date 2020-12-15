@@ -11,7 +11,7 @@ exports.fetchProfile = function (req, res, next) {
   // Require auth
 
   // Return profile info
-  // console.log(req.user);
+  //console.log(req.user);
 
   const user = {
     email: req.user.email,
@@ -26,6 +26,19 @@ exports.fetchProfile = function (req, res, next) {
   };
   res.send({
     user: user,
+  });
+};
+
+exports.fetchProfileById = function (req, res, next) {
+  // Require auth
+
+  // Return profile info
+  console.log(req.user);
+
+  User.findById(req.params.id).then((user) => {
+    res.send({
+      user,
+    });
   });
 };
 
@@ -131,7 +144,7 @@ exports.resetPassword = function (req, res, next) {
 };
 
 exports.updateAgent = function (req, res, next) {
-  console.log(req.body);
+  //console.log(req.body);
   const {
     uid,
     phno,
@@ -142,17 +155,49 @@ exports.updateAgent = function (req, res, next) {
     birthday,
     skills,
   } = req.body;
-  User.findById(uid).then((user) => {
-    user.phone = phno;
-    user.sex = sex;
-    user.description = description;
-    user.occupation = occupation;
-    user.address = address;
-    user.birthday = birthday;
-    user.isAgent = true;
-    user.skills = skills;
-    user.save().then((u) => {
-      res.send(u);
-    });
-  });
+
+  // User.findById(uid).then((user) => {
+  //   user.phone = phno;
+  //   user.sex = sex;
+  //   user.description = description;
+  //   user.occupation = occupation;
+  //   user.address = address;
+  //   user.birthday = birthday;
+  //   user.isAgent = true;
+  //   user.skills = skills;
+  //   user.save().then((u) => {
+  //     //changing password(/w hash)(as in user model after saving on function runs which changes hash and ultimately password of the user) causing login prob so commented
+  //     res.send(u);
+  //   });
+  // });
+
+  User.findByIdAndUpdate(
+    uid,
+    {
+      $set: {
+        phone: phno,
+        sex: sex,
+        birthday: birthday,
+        description: description,
+        occupation: occupation,
+        address: address,
+        birthday: birthday,
+        isAgent: true,
+        skills: skills,
+      },
+    },
+    { new: true },
+    function (err, updatedUser) {
+      if (err) {
+        return next(err);
+      }
+      // Delete unused properties: _id, password, __v
+      updatedUser = updatedUser.toObject();
+      delete updatedUser["_id"];
+      delete updatedUser["password"];
+      delete updatedUser["__v"];
+      // Return updated user profile
+      res.send({ user: updatedUser });
+    }
+  );
 };

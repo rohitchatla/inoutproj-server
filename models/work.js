@@ -3,13 +3,19 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt-nodejs");
 
 const statusSchema = new Schema({
+  //when work posted it customerRequested:true
   customerRequested: { type: Boolean, default: false },
   agentRequested: { type: Boolean, default: false },
   customerAccepted: { type: Boolean, default: false },
+  customerCancelled: { type: Boolean, default: false },
+  agentCancelled: { type: Boolean, default: false },
+  workDone: { type: Boolean, default: false },
+  //agentAccepted: { type: Boolean, default: false }, will be lengthy process inview of customer
 });
 
 const workStatusSchema = new Schema({
-  workOngoing: { type: Boolean, default: false },
+  //not started beforehand
+  workOngoing: { type: Boolean, default: false }, //or started
   workCancelled: { type: Boolean, default: false },
   workCompleted: { type: Boolean, default: false },
 });
@@ -22,13 +28,17 @@ const workSchema = new Schema({
   description: { type: String },
   cost: { type: Number },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-  agentId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+  agentId: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+  finalagentId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
   serviceId: { type: mongoose.Schema.Types.ObjectId, ref: "service" },
   isCust: { type: Boolean, default: true },
   isSkilled: { type: Boolean, default: false },
   status: [statusSchema],
+  currentstatus: { type: String },
+  currentworkstatus: { type: String },
   isWork: { type: Boolean, default: false },
   workstatus: [workStatusSchema],
+  postedBy: { type: String }, //cust or agent
   completedtransaction: [
     {
       type: mongoose.Schema.Types.ObjectId,

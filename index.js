@@ -34,6 +34,37 @@ router(app);
 
 // Server Setup
 const port = process.env.PORT || 5000;
-const server = http.createServer(app);
-server.listen(port);
+//const server = http.createServer(app);
+//server.listen(port);
 console.log("Server listening on: ", port);
+
+/**  Sockets routines **/
+
+const io = require("socket.io")(app.listen(5000));
+
+io.on("connection", function (socket) {
+  console.log("connection is successful" + " " + socket.id);
+  var users = {};
+
+  socket.on("init", (payload) => {
+    users[payload.uid] = socket;
+  });
+  socket.on("agenttake", (payload) => {
+    //console.log(at.work);
+    //socket.emit("refresh", { work: payload.work });
+    users[payload.work.userId].emit("refresh", { work: payload.work });
+  });
+  socket.on("custacceptjob", (payload) => {
+    //loop .. all 10 agents in payload.agentId or socket-rooms
+    users[payload.fagentid].emit("refresh", { work: payload.work });
+  });
+  socket.on("custrejectjob", (payload) => {
+    users[payload.fagentid].emit("refresh", { work: payload.work });
+  });
+  socket.on("agentrejectjob", (payload) => {
+    users[payload.work.userId].emit("refresh", { work: payload.work });
+  });
+  socket.on("completedjob", (payload) => {
+    users[payload.fagentid].emit("refresh", { work: payload.work });
+  });
+});

@@ -8,7 +8,7 @@ function tokenForUser(user) {
   const timestamp = new Date().getTime();
   return jwt.encode(
     { sub: user._id, iat: timestamp },
-    config.secret || "gdghdfhghfhdfhfhfhf"
+    config.secret || "Gsenfksdjldsmdhmkdfkdsmfkmsdknfsdk"
   );
   // sub: subject (the very specific user)
   // iat: issued at time
@@ -22,7 +22,7 @@ function tokenForUser(user) {
  * @param next
  */
 exports.signup = function (req, res, next) {
-  console.log(req.body);
+  //console.log(req.body);
   const email = req.body.email;
   const password = req.body.password;
   const firstName = req.body.firstName;
@@ -52,7 +52,7 @@ exports.signup = function (req, res, next) {
       firstName: firstName,
       lastName: lastName,
     });
-    console.log(user);
+    //console.log(user);
     user.save(function (err) {
       // callback function
       if (err) {
@@ -79,6 +79,8 @@ exports.signin = function (req, res, next) {
 
   // User has already had their email and password auth'd (through passport middleware [LocalStrategy])
   // We just need to give them a token
+
+  //console.log(req.user);
   res.send({
     token: tokenForUser(req.user),
     username: req.user.firstName + " " + req.user.lastName,
@@ -95,7 +97,6 @@ exports.signin = function (req, res, next) {
  */
 exports.verifyJwt = function (req, res, next) {
   // Require auth
-
   res.send({
     username: req.user.firstName + " " + req.user.lastName,
   });

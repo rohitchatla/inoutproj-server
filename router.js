@@ -29,61 +29,66 @@ const storage = multer.diskStorage({
 const uploadFile = multer({ storage });
 
 module.exports = function (app) {
-  /**
+  /*
    * Authentication APIs
    */
 
   app.get("/api/", requireAuth, function (req, res) {
     res.send({ message: "Super secret code is ABC123" });
   });
-
   app.post("/api/signup", Authentication.signup);
-
   app.post("/api/signin", requireSignin, Authentication.signin);
   // app.post('/api/signin', Authentication.signin);
-
   app.get("/api/verify_jwt", requireAuth, Authentication.verifyJwt);
 
-  /**
+  /*
    * Profile APIs
    */
 
   app.get("/api/profile", requireAuth, Profile.fetchProfile);
-
+  app.get("/api/profile/:id", requireAuth, Profile.fetchProfileById);
   app.put("/api/profile", requireAuth, Profile.updateProfile);
 
   app.put("/api/password", requireAuth, Profile.resetPassword);
 
-  /*Services */
+  /* Services */
   app.get("/api/getservices", Services.fetchServices);
 
-  /*Agent routes */
+  /* Agent routes */
   app.post("/api/agent/update", Profile.updateAgent);
-  /*
-  Work Routes
-  */
+
+  /*Work Routes*/
+
   //app.post("/api/work", Work.postWork);
   //app.post("/api/work/photo/:postId", Work.photo);
   //uploadFile.single("file")
+
   app.get("/api/work", Work.fetchWorks);
   app.get("/api/workbyuid/:id", Work.fetchWorksbyUid);
+  app.get("/api/workdonebyuid/:id", Work.fetchWorksDonebyUid);
   app.get("/api/work/:id", Work.fetchWorksbyid);
+
   app.get("/api/serviceid2service/:id", Work.serviceid2service);
+
   app.post("/api/work/status/agentrequested", Work.agentrequested);
   app.post("/api/work/status/custaccepted", Work.custaccepted);
+
   app.post("/api/work/status/custrejected", Work.custrejected);
+  app.post("/api/work/status/agentrejected", Work.agentwithdraw);
+
   app.post("/api/work/status/workdone", Work.workdone);
 
-  app.post("/api/payment/", Payment.payment);
-
   app.post("/api/work", uploadFile.single("file"), (req, res, next) => {
-    const { uid, name, description, cost, serviceId } = req.body; //files
+    const { uid, name, description, cost, serviceId, postedBy } = req.body; //files
     let status = [];
     let workstatus = [];
     let obj = {
-      customerRequested: false,
+      customerRequested: true,
       agentRequested: false,
       customerAccepted: false,
+      customerCancelled: false,
+      agentCancelled: false,
+      workDone: false,
     };
     let obj2 = {
       workOngoing: false,
@@ -101,7 +106,12 @@ module.exports = function (app) {
       photo: req.file.filename,
       status: status,
       workstatus: workstatus,
+      currentstatus: "custrequested",
+      currentworkstatus: "notstarted",
       completedtransaction: [],
+      agentId: [],
+      postedBy,
+      //finalagentId: "",//object_id expected
     }).then((work) => {
       res.send(work);
     });
@@ -127,6 +137,10 @@ module.exports = function (app) {
     // });
     //console.log(req.file);
   });
+
+  /*Payment & transaction details */
+  app.post("/api/payment/", Payment.payment);
+  app.get("/api/payment/", Payment.trans);
 };
 
 // CRUD:
