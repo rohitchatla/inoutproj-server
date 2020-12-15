@@ -40,7 +40,7 @@ console.log("Server listening on: ", port);
 
 /**  Sockets routines **/
 
-const io = require("socket.io")(app.listen(5000));
+const io = require("socket.io")(app.listen(process.env.PORT || 5000));
 
 io.on("connection", function (socket) {
   console.log("connection is successful" + " " + socket.id);
