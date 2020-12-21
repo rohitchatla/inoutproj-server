@@ -42,10 +42,14 @@ const userSchema = new Schema({
   //agentDetails
   isAgent: { type: Boolean, default: false },
   skills: { type: String, default: "" },
-  aadharid: { type: String, default: "" },
   isWorking: { type: Boolean, default: false },
   currentWorking: { type: mongoose.Schema.Types.ObjectId, ref: "work" },
   savedCards: [SavedCard],
+  photo: { type: String },
+  aadharcard: { type: String },
+  aadharcardb64: { type: String },
+  aadhardetails: { type: Object },
+  rating: { type: Number, default: 0 },
 });
 
 // On Save Hook, encrypt the password

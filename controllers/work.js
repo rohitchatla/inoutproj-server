@@ -170,4 +170,6 @@ exports.workdone = async function (req, res, next) {
       });
     })
     .catch(() => {});
+
+  /*Rate cal logic with work feedback(sentiment,rating(0-5)) from work from profile feedbacks(sentiment,rating(0-5)), etc*/
 };

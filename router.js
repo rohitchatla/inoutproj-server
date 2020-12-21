@@ -9,6 +9,7 @@ const Profile = require("./controllers/userinfo");
 const Work = require("./controllers/work");
 const Payment = require("./controllers/payment");
 const Services = require("./controllers/services");
+const Feedback = require("./controllers/feedbacks");
 // service
 const passport = require("passport");
 const passportService = require("./services/passport");
@@ -47,7 +48,12 @@ module.exports = function (app) {
 
   app.get("/api/profile", requireAuth, Profile.fetchProfile);
   app.get("/api/profile/:id", requireAuth, Profile.fetchProfileById);
-  app.put("/api/profile", requireAuth, Profile.updateProfile);
+  app.put(
+    "/api/profile",
+    requireAuth,
+    uploadFile.single("image"),
+    Profile.updateProfile
+  );
 
   app.put("/api/password", requireAuth, Profile.resetPassword);
 
@@ -55,7 +61,11 @@ module.exports = function (app) {
   app.get("/api/getservices", Services.fetchServices);
 
   /* Agent routes */
-  app.post("/api/agent/update", Profile.updateAgent);
+  app.post(
+    "/api/agent/update",
+    uploadFile.single("image"),
+    Profile.updateAgent
+  );
 
   /*Work Routes*/
 
@@ -138,9 +148,19 @@ module.exports = function (app) {
     //console.log(req.file);
   });
 
-  /*Payment & transaction details */
+  /* Payment & transaction details */
   app.post("/api/payment/", Payment.payment);
-  app.get("/api/payment/", Payment.trans);
+  app.get("/api/payment/trans/:id", Payment.trans);
+
+  /* Feedbacks */
+
+  app.post("/api/feedback/", Feedback.postFeedback);
+  app.get("/api/getfeedbacks/:id", Feedback.getFeedback);
+
+  /* All profiles */
+  app.get("/api/allprofilesagent/", Profile.allprofilesagent);
+  app.get("/api/allprofilescust/", Profile.allprofilescust);
+  app.get("/api/profiledet/:id", Profile.profiledet);
 };
 
 // CRUD:

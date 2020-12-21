@@ -8,7 +8,7 @@ const { v4: uuidv4 } = require("uuid");
 exports.trans = async function (req, res, next) {
   try {
     const { id } = req.params;
-    const fetchtrans = await TransactionDoc.find({ userId: id });
+    const fetchtrans = await TransactionDoc.find(); //{ userId: id }
     res.send(fetchtrans);
   } catch (err) {
     res.json({ message: err });
@@ -114,7 +114,7 @@ exports.payment = async function (req, res, next) {
         });
     })
     .then(async (result) => {
-      //console.log(result);
+      console.log(result);
       res.status(200).json(result);
     })
     .catch((err) => {
