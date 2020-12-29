@@ -10,28 +10,32 @@ const axios = require("axios");
  */
 exports.postFeedback = async function (req, res, next) {
   const { feedbackText, fagentID, custID, workID, ratingForWork } = req.body;
-  axios
-    .post(`https://inout-mldl-pack.herokuapp.com/sentiment`, {
-      text: feedbackText,
-    })
-    .then((response) => {
-      let pred_sentiment = response.data[0];
-      let confidence = response.data[1];
-      let obj = {
-        sentiment: pred_sentiment,
-        confidence: confidence,
-      };
-      Feedback.create({
-        fromID: custID,
-        toID: fagentID,
-        workID: workID != "" ? workID : null, //5489234587245784 or ""->general
-        feedbackText: feedbackText,
-        ratingForWork: ratingForWork,
-        sentiment: obj,
-      }).then((fb) => {
-        res.send(fb);
+  if (feedbackText != "" || ratingForWork != "") {
+    axios
+      .post(`https://inout-mldl-pack.herokuapp.com/sentiment`, {
+        text: feedbackText,
+      })
+      .then((response) => {
+        let pred_sentiment = response.data[0];
+        let confidence = response.data[1];
+        let obj = {
+          sentiment: pred_sentiment,
+          confidence: confidence,
+        };
+        Feedback.create({
+          fromID: custID,
+          toID: fagentID,
+          workID: workID != "" ? workID : null, //5489234587245784 or ""->general
+          feedbackText: feedbackText,
+          ratingForWork: ratingForWork,
+          sentiment: obj,
+        }).then((fb) => {
+          res.send(fb);
+        });
       });
-    });
+  } else {
+    res.send({ msg: "send feedbacktext or ratingforwork" });
+  }
 };
 
 exports.getFeedback = async function (req, res, next) {
