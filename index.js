@@ -69,7 +69,7 @@ io.on("connection", function (socket) {
   });
   socket.on("custrejectjob", (payload) => {
     //users[payload.fagentid].emit("refresh", { work: payload.work });
-    users[payload.work.finalagentId].emit("refresh", { work: payload.work });
+    users[payload.work.finalagentId].emit("refresh", { work: payload.work }); //agent
     users[payload.work.userId].emit("refresh", { work: payload.work }); //cust
   });
   socket.on("agentrejectjob", (payload) => {
@@ -77,7 +77,7 @@ io.on("connection", function (socket) {
     users[payload.work.finalagentId].emit("refresh", { work: payload.work }); //agent
   });
   socket.on("completedjob", (payload) => {
-    users[payload.work.finalagentId].emit("refresh", { work: payload.work }); //agent
+    users[payload.work.finalagentId].emit("refresh", { work: payload.work }); //agent //payload.fagentid
     users[payload.work.userId].emit("refresh", { work: payload.work }); //cust
   });
 });

@@ -88,12 +88,29 @@ exports.agentrequested = async function (req, res, next) {
       //console.log(work);
       work.save().then((w) => {
         //console.log(w);
-        User.findById(agentid).then((agent) => {
-          agent.isWorking = true;
-          agent.currentWorking = w._id;
-          agent.save();
-          res.send(w);
-        });
+        // User.findById(agentid).then((agent) => {
+        //   agent.isWorking = true;
+        //   agent.currentWorking = w._id;
+        //   agent.save(); //can change password so below one
+        //   res.send(w);
+        // });
+
+        User.findByIdAndUpdate(
+          agentid,
+          {
+            $set: {
+              isWorking: true,
+              currentWorking: w._id,
+            },
+          },
+          { new: true },
+          function (err, updatedUser) {
+            if (err) {
+              return next(err);
+            }
+            res.send(w);
+          }
+        );
       });
     })
     .catch(() => {});
@@ -171,5 +188,5 @@ exports.workdone = async function (req, res, next) {
     })
     .catch(() => {});
 
-  /*Rate cal logic with work feedback(sentiment,rating(0-5)) from work from profile feedbacks(sentiment,rating(0-5)), etc*/
+  /*Rate/Rating cal logic with work feedback(sentiment,rating(0-5)) from work from profile feedbacks(sentiment,rating(0-5)), etc*/
 };
